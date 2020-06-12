@@ -21,6 +21,7 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, screenHandl
         var y = 0
         (0 until 12).forEach { slot ->
             val itemWidget = WSelectableItemSlot(blockInventory, slot)
+            itemWidget.isModifiable = false
             if (x >= 3) {
                 y++
                 x = 0
@@ -33,7 +34,7 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, screenHandl
         panel.add(modifierWidgets, 4, 0)
         // MATERIALS SLOTS
         val materialsWidgets = WItemSlot.of(blockInventory, 20, 9, 1)
-        
+
         panel.add(materialsWidgets, 0, 5)
         val inputItemWidget = WItemSlot.of(blockInventory, 29)
         panel.add(inputItemWidget, 7.0, 0.5)

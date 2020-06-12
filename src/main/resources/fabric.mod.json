@@ -21,7 +21,19 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleModKt::init"
+      {
+        "adapter": "kotlin",
+        "value": "io.github.cafeteriaguild.advweaponry.Weaponry"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "io.github.cafeteriaguild.advweaponry.WeaponryClient"
+      }
+    ],
+    "modmenu": [
+      "io.github.cafeteriaguild.advweaponry.integration.ModMenuIntegration"
     ]
   },
   "mixins": [

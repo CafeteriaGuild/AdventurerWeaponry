@@ -33,7 +33,7 @@ class DirtWallAbility : Ability() {
             for (x in box.minX.toInt() until box.maxX.toInt()) {
                 for (z in box.minZ.toInt() until box.maxZ.toInt()) {
                     val blockPos = BlockPos(x, y, z)
-                    if (isCreative || inventory?.containsAny(setOf(Blocks.DIRT.asItem())) == true
+                    if ((isCreative || inventory?.containsAny(setOf(Blocks.DIRT.asItem())) == true)
                         && world?.isAir(blockPos) == true
                         && world.canSetBlock(blockPos)
                     ) {
@@ -42,7 +42,7 @@ class DirtWallAbility : Ability() {
                                 inventory.getStack(it).decrement(1)
                             }
                         }
-                        world?.setBlockState(blockPos, dirtState)
+                        world.setBlockState(blockPos, dirtState)
                         affectedPositions += blockPos
 
                     }

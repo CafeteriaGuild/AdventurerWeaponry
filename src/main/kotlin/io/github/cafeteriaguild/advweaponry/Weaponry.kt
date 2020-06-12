@@ -3,6 +3,7 @@ package io.github.cafeteriaguild.advweaponry
 import com.mojang.serialization.Lifecycle
 import io.github.cafeteriaguild.advweaponry.gui.TableController
 import io.github.cafeteriaguild.advweaponry.items.modifiers.Modifier
+import io.github.cafeteriaguild.advweaponry.items.modifiers.Modifiers
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
@@ -29,6 +30,7 @@ object Weaponry : ModInitializer {
         AWBlocks.init()
         AWItems.init()
         AWEntities.init()
+        Modifiers.init()
 
         ContainerProviderRegistry.INSTANCE.registerFactory(
             TableController.SCREEN_ID

@@ -4,7 +4,6 @@ import io.github.cafeteriaguild.advweaponry.identifier
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.block.Blocks
-import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.network.PacketByteBuf
@@ -27,7 +26,8 @@ class DirtWallAbility : Ability() {
         val zRange = if (facing.axis == Direction.Axis.X) 1.0 else 0.0
         val dirtState = Blocks.DIRT.defaultState
         val box = Box(pos.up()).expand(xRange, 0.0, zRange).stretch(0.0, 2.0, 0.0)
-        var shouldPlaySound = false
+
+        val affectedPositions = ArrayList<BlockPos>()
 
         for (y in box.minY.toInt() until box.maxY.toInt()) {
             for (x in box.minX.toInt() until box.maxX.toInt()) {
@@ -43,15 +43,22 @@ class DirtWallAbility : Ability() {
                             }
                         }
                         world?.setBlockState(blockPos, dirtState)
-                        val buf = PacketByteBuf(Unpooled.buffer())
-                        buf.writeBlockPos(blockPos)
-                        ServerSidePacketRegistry.INSTANCE.sendToPlayer(context.player, PARTICLE_PACKET, buf)
-                        shouldPlaySound = true
+                        affectedPositions += blockPos
+
                     }
                 }
             }
         }
-        if (shouldPlaySound) {
+        if (affectedPositions.isNotEmpty()) {
+            val buf = PacketByteBuf(Unpooled.buffer()).apply {
+                writeBlockPos(pos)
+                writeInt(affectedPositions.size)
+                affectedPositions.forEach { writeBlockPos(it) }
+            }
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(context.player, DIRT_WALL_PACKET, buf)
+        }
+
+        if (true) { // false, IDK?
             world.playSound(
                 pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
                 SoundEvents.BLOCK_GRAVEL_PLACE, SoundCategory.BLOCKS,
@@ -62,6 +69,6 @@ class DirtWallAbility : Ability() {
     }
 
     companion object {
-        val PARTICLE_PACKET = identifier("dirt_wall_particle_packet")
+        val DIRT_WALL_PACKET = identifier("dirt_wall_packet")
     }
 }

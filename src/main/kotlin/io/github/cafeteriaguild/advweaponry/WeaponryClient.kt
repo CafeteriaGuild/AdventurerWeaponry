@@ -27,8 +27,9 @@ object WeaponryClient : ClientModInitializer {
             )
         }
 
-        ClientSidePacketRegistry.INSTANCE.register(DirtWallAbility.PARTICLE_PACKET) { ctx, buf ->
+        ClientSidePacketRegistry.INSTANCE.register(DirtWallAbility.DIRT_WALL_PACKET) { ctx, buf ->
             val pos = buf.readBlockPos()
+            val affectedPositions = List(buf.readInt()) { buf.readBlockPos() }
             ctx.taskQueue.execute {
                 MinecraftClient.getInstance().particleManager.addBlockBreakParticles(pos, Blocks.DIRT.defaultState)
             }

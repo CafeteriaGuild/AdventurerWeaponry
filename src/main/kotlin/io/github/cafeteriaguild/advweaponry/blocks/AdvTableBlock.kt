@@ -15,23 +15,22 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 
-class BlockModTable(settings: Settings) : Block(settings), InventoryProvider {
+class AdvTableBlock(settings: Settings) : Block(settings), InventoryProvider {
     override fun getInventory(state: BlockState?, world: WorldAccess?, pos: BlockPos?): SidedInventory =
         AWInventory(31) { _, _ -> true }
 
     override fun onUse(
-        state: BlockState?,
-        world: World?,
-        pos: BlockPos?,
-        player: PlayerEntity?,
-        hand: Hand?,
-        hit: BlockHitResult?
+        state: BlockState,
+        world: World,
+        pos: BlockPos,
+        player: PlayerEntity,
+        hand: Hand,
+        hit: BlockHitResult
     ): ActionResult {
-        if (world?.isClient == false) {
-            ContainerProviderRegistry.INSTANCE.openContainer(
-                TableController.SCREEN_ID,
-                player
-            ) { packetByteBuf -> packetByteBuf.writeBlockPos(pos) }
+        if (!world.isClient) {
+            ContainerProviderRegistry.INSTANCE.openContainer(TableController.SCREEN_ID, player) { buf ->
+                buf.writeBlockPos(pos)
+            }
         }
         return ActionResult.SUCCESS
     }

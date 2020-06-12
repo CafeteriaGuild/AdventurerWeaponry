@@ -1,5 +1,6 @@
 package io.github.cafeteriaguild.advweaponry.mixin;
 
+import io.github.cafeteriaguild.advweaponry.Weaponry;
 import io.github.cafeteriaguild.advweaponry.items.modifiers.Modifiers;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -48,7 +50,7 @@ public abstract class MixinBowItem extends Item {
                     for (Tag tag : listTag) {
                         CompoundTag compoundTag = (CompoundTag) tag;
                         String id = compoundTag.getString("Id");
-                        if (id.equals(Modifiers.INSTANCE.getDrawTimeReducer().getIdentifier().toString())) {
+                        if (Weaponry.INSTANCE.getModifierRegistry().get(new Identifier(id)) == Modifiers.INSTANCE.getDrawTimeReducer()) {
                             int lvl = compoundTag.getInt("Lvl");
                             f += lvl / 10f;
                         }

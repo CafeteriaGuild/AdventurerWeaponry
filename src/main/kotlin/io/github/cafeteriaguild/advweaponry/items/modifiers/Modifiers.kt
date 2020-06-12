@@ -2,7 +2,6 @@ package io.github.cafeteriaguild.advweaponry.items.modifiers
 
 import io.github.cafeteriaguild.advweaponry.Weaponry
 import io.github.cafeteriaguild.advweaponry.identifier
-import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 

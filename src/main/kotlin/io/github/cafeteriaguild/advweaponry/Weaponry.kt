@@ -28,6 +28,7 @@ object Weaponry : ModInitializer {
     override fun onInitialize() {
         AWBlocks.init()
         AWItems.init()
+        AWEntities.init()
 
         ContainerProviderRegistry.INSTANCE.registerFactory(
             TableController.SCREEN_ID

@@ -1,5 +1,6 @@
 package io.github.cafeteriaguild.advweaponry
 
+import io.github.cafeteriaguild.advweaponry.items.AWFreezingBombItem
 import io.github.cafeteriaguild.advweaponry.items.AWStaffItem
 import io.github.cafeteriaguild.advweaponry.items.abilities.Abilities
 import net.minecraft.item.Item
@@ -11,8 +12,10 @@ import net.minecraft.item.Item
 object AWItems {
     // TODO Properly calculate the items's damage.
     val earthStaff = AWStaffItem(Abilities.dirtWall, Item.Settings().group(Weaponry.mainGroup).maxDamage(400))
+    val freezingBomb = AWFreezingBombItem(Item.Settings().group(Weaponry.mainGroup))
 
     fun init() {
         identifier("earth_staff").item(earthStaff)
+        identifier("freezing_bomb").item(freezingBomb)
     }
 }

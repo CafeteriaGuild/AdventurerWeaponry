@@ -8,9 +8,15 @@ import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.minecraft.block.Blocks
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.MinecraftClientGame
+import net.minecraft.client.sound.PositionedSoundInstance
+import net.minecraft.client.sound.SoundInstance
+import net.minecraft.client.sound.SoundInstanceListener
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandlerContext
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Identifier
 
 object WeaponryClient : ClientModInitializer {
@@ -31,7 +37,12 @@ object WeaponryClient : ClientModInitializer {
             val pos = buf.readBlockPos()
             val affectedPositions = List(buf.readInt()) { buf.readBlockPos() }
             ctx.taskQueue.execute {
-                MinecraftClient.getInstance().particleManager.addBlockBreakParticles(pos, Blocks.DIRT.defaultState)
+                MinecraftClient.getInstance().soundManager.play(
+                    PositionedSoundInstance(SoundEvents.BLOCK_GRAVEL_PLACE, SoundCategory.BLOCKS, 1f, 0.8f, pos)
+                )
+                affectedPositions.forEach {
+                    MinecraftClient.getInstance().particleManager.addBlockBreakParticles(it, Blocks.DIRT.defaultState)
+                }
             }
         }
     }

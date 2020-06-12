@@ -1,8 +1,8 @@
 package io.github.cafeteriaguild.advweaponry.blocks.logic
 
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import java.util.*
 
 object CraftingLogic {
     val recipes = listOf(
@@ -21,19 +21,29 @@ object CraftingLogic {
         val groupedItems = craftingItems.groupBy({ it.item }, { it })
         val countedItems = groupedItems.mapValues { it.value.sumBy { it.count } }
 
-        recipes.filter { it.craftingMaterials.all { (kind, count) -> count >= countedItems[kind] ?: 0 } }
-            .map {
-                PossibleRecipe(it, resultItemsForRecipe(it, groupedItems))
-            }
-
-        TODO()
+        return recipes.filter { it.craftingMaterials.all { (item, count) -> count >= countedItems[item] ?: 0 } }
+            .map { PossibleRecipe(it, consumeCraftingItems(it, craftingItems), 0) }
+            .chunked(12)
     }
 
-    private fun resultItemsForRecipe(r: BaseRecipe, k: Map<Item, List<ItemStack>>): List<ItemStack> {
-        val remaining = r.craftingMaterialsMap.toMutableMap()
-        val result = ArrayList<ItemStack>()
-        for ((stack, list) in k) {
+    private fun consumeCraftingItems(recipe: BaseRecipe, craftingItems: List<ItemStack>): List<ItemStack> {
+        val result = craftingItems.mapTo(ArrayList()) { it.copy() }
 
+        for ((item, count) in recipe.craftingMaterials) {
+            var remaining = count
+            // Yes, that's a for loop with index. Why? because I need to replace values without CME.
+            for (i in result.indices) {
+                val stack = result[i]
+                if (stack.item == item) {
+                    if (stack.count <= remaining) {
+                        remaining -= stack.count
+                        result[i] = ItemStack.EMPTY
+                    } else {
+                        stack.decrement(remaining)
+                        break
+                    }
+                }
+            }
         }
 
         return result

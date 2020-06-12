@@ -1,7 +1,7 @@
 package io.github.cafeteriaguild.advweaponry
 
 /**
- * Tools, Weapons, Books, etc
+ * Crafting Materials, etc
  */
-object AWItems {
+object AWLoreItems {
 }

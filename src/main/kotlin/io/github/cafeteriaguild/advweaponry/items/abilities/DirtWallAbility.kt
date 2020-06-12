@@ -1,9 +1,13 @@
 package io.github.cafeteriaguild.advweaponry.items.abilities
 
+import io.github.cafeteriaguild.advweaponry.identifier
+import io.netty.buffer.Unpooled
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.block.Blocks
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.ActionResult
@@ -15,6 +19,7 @@ class DirtWallAbility : Ability() {
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
         val pos = context.blockPos
         val world = context.world
+        if (world?.isClient == true) return ActionResult.SUCCESS
         val facing = context.playerFacing
         val isCreative = context.player?.isCreative == true
         val inventory = context.player?.inventory
@@ -38,11 +43,9 @@ class DirtWallAbility : Ability() {
                             }
                         }
                         world?.setBlockState(blockPos, dirtState)
-                        if (world?.isClient == true) {
-                            // TODO this should be turned into a packet
-                            // see https://fabricmc.net/wiki/tutorial:networking
-                            MinecraftClient.getInstance().particleManager.addBlockBreakParticles(blockPos, dirtState)
-                        }
+                        val buf = PacketByteBuf(Unpooled.buffer())
+                        buf.writeBlockPos(blockPos)
+                        ServerSidePacketRegistry.INSTANCE.sendToPlayer(context.player, PARTICLE_PACKET, buf)
                         shouldPlaySound = true
                     }
                 }
@@ -56,5 +59,9 @@ class DirtWallAbility : Ability() {
             )
         }
         return ActionResult.SUCCESS
+    }
+
+    companion object {
+        val PARTICLE_PACKET = identifier("dirt_wall_particle_packet")
     }
 }

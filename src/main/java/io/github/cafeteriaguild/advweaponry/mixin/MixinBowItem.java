@@ -48,7 +48,7 @@ public abstract class MixinBowItem extends Item {
                     for (Tag tag : listTag) {
                         CompoundTag compoundTag = (CompoundTag) tag;
                         String id = compoundTag.getString("Id");
-                        if (id.equals(Modifiers.INSTANCE.getDRAW_TIME_REDUCER().getIdentifier().toString())) {
+                        if (id.equals(Modifiers.INSTANCE.getDrawTimeReducer().getIdentifier().toString())) {
                             int lvl = compoundTag.getInt("Lvl");
                             f += lvl / 10f;
                         }

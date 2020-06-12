@@ -1,6 +1,6 @@
 package io.github.cafeteriaguild.advweaponry
 
-import io.github.cafeteriaguild.advweaponry.Weaponry.AW_GROUP
+import io.github.cafeteriaguild.advweaponry.Weaponry.mainGroup
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WWidget
 import net.minecraft.block.Block
@@ -19,7 +19,7 @@ fun Identifier.item(item: Item) = apply {
     Registry.register(Registry.ITEM, this, item)
 }
 
-fun Identifier.blockAndItem(block: Block, settings: Item.Settings = Item.Settings().group(AW_GROUP)) = apply {
+fun Identifier.blockAndItem(block: Block, settings: Item.Settings = Item.Settings().group(mainGroup)) = apply {
     Registry.register(Registry.BLOCK, this, block)
     Registry.register(Registry.ITEM, this, BlockItem(block, settings))
 }

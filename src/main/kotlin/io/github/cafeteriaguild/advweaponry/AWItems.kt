@@ -10,9 +10,9 @@ import net.minecraft.item.Item
 @Suppress("MemberVisibilityCanBePrivate")
 object AWItems {
     // TODO Properly calculate the items's damage.
-    val EARTH_STAFF = AWStaffItem(Abilities.DIRT_WALL, Item.Settings().group(Weaponry.AW_GROUP).maxDamage(400))
+    val earthStaff = AWStaffItem(Abilities.dirtWall, Item.Settings().group(Weaponry.mainGroup).maxDamage(400))
 
     fun init() {
-        identifier("earth_staff").item(EARTH_STAFF)
+        identifier("earth_staff").item(earthStaff)
     }
 }

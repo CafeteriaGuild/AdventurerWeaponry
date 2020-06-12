@@ -2,6 +2,7 @@ package io.github.cafeteriaguild.advweaponry
 
 import io.github.cafeteriaguild.advweaponry.blocks.BlockModTable
 import io.github.cafeteriaguild.advweaponry.gui.TableController
+import io.github.cafeteriaguild.advweaponry.items.staffs.AWEarthStaff
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
@@ -25,6 +26,10 @@ object Weaponry : ModInitializer {
             Registry.register(Registry.ITEM, this, TABLE_BLOCK_ITEM)
         }
 
+        identifier("earth_staff") {
+            Registry.register(Registry.ITEM, this, EARTH_STAFF)
+        }
+
         ContainerProviderRegistry.INSTANCE.registerFactory(
             TableController.SCREEN_ID
         ) { syncId: Int, _: Identifier?, player: PlayerEntity, buf: PacketByteBuf ->
@@ -36,4 +41,6 @@ object Weaponry : ModInitializer {
 
     val TABLE: Block = BlockModTable(FabricBlockSettings.of(Material.WOOD))
     val TABLE_BLOCK_ITEM: BlockItem = BlockItem(TABLE, Item.Settings().group(MOD_GROUP))
+
+    val EARTH_STAFF = AWEarthStaff(Item.Settings().group(MOD_GROUP))
 }

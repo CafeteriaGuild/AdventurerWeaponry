@@ -19,14 +19,27 @@ object CraftingLogic {
      * This methods' result return chunks of 12 recipes.
      */
     fun recipesForItems(craftingItems: List<ItemStack>): List<List<PossibleRecipe>> {
-        val mappedKinds = craftingItems.mapNotNull {
-            (it to MaterialKinds.fromItem(it.item)).takeUnless { (_, k) -> k.isEmpty() }
-        }
+        val craftingItemKinds = craftingItems.map { it to MaterialKinds.fromItem(it.item) }
+        val countedKinds = craftingItemKinds
+            .flatMap { (stack, list) -> list.map { k -> k to stack } }
+            .groupBy({ it.first }, { it.second })
+            .mapValues { it.value.sumBy { it.count } }
+
+        recipes.filter { it.craftingMaterials.all { (kind, count) -> count >= countedKinds[kind] ?: 0 } }
+            .map {
+                PossibleRecipe(it, resultItemsForRecipe(it, craftingItemKinds))
+            }
 
         TODO()
     }
 
-    private fun matchMaterials(recipe: BaseRecipe, mappedKinds: List<Pair<ItemStack, List<MaterialKind>>>) {
+    private fun resultItemsForRecipe(r: BaseRecipe, k: List<Pair<ItemStack, List<MaterialKind>>>): List<ItemStack> {
+        val remaining = r.craftingMaterialsMap.toMutableMap()
+        val result = ArrayList<ItemStack>()
+        for ((stack, list) in k) {
 
+        }
+
+        return result
     }
 }

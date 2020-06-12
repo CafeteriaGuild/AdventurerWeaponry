@@ -1,20 +1,22 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "advweaponry",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Adventurer's Weaponry",
+  "description": "RPG-Inspired Weapons.",
   "authors": [
-    "Me!"
+    "GabrielOlvH",
+    "adriantodt",
+    "jonatsp"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/CafeteriaGuild/AdventurerWeaponry"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "Apache-2.0",
+  "icon": "assets/advweaponry/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -23,7 +25,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "advweaponry.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.7.1",

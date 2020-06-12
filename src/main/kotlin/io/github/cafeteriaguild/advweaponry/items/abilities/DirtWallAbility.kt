@@ -57,14 +57,6 @@ class DirtWallAbility : Ability() {
             }
             ServerSidePacketRegistry.INSTANCE.sendToPlayer(context.player, DIRT_WALL_PACKET, buf)
         }
-
-        if (true) { // false, IDK?
-            world.playSound(
-                pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
-                SoundEvents.BLOCK_GRAVEL_PLACE, SoundCategory.BLOCKS,
-                1.0f, 0.8f, false
-            )
-        }
         return ActionResult.SUCCESS
     }
 

@@ -1,4 +1,6 @@
 package io.github.cafeteriaguild.advweaponry.items.modifiers
 
-class Modifier(val maxLevel: Int = 1) {
+import net.minecraft.util.Identifier
+
+class Modifier(val identifier: Identifier, val maxLevel: Int = 1) {
 }

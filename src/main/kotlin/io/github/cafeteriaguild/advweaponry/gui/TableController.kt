@@ -1,6 +1,8 @@
 package io.github.cafeteriaguild.advweaponry.gui
 
 import io.github.cafeteriaguild.advweaponry.add
+import io.github.cafeteriaguild.advweaponry.gui.widgets.AWWGridPanel
+import io.github.cafeteriaguild.advweaponry.gui.widgets.WSelectableItemSlot
 import io.github.cafeteriaguild.advweaponry.identifier
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
@@ -11,7 +13,7 @@ import net.minecraft.screen.ScreenHandlerContext
 class TableController(syncId: Int, playerInventory: PlayerInventory, screenHandlerContext: ScreenHandlerContext)
     : SyncedGuiDescription(syncId, playerInventory, getBlockInventory(screenHandlerContext), getBlockPropertyDelegate(screenHandlerContext)) {
     init {
-        val panel = WGridPanel()
+        val panel = AWWGridPanel()
         setRootPanel(panel)
         panel.setSize(150, 120)
 
@@ -19,7 +21,7 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, screenHandl
         var x = 0
         var y = 0
         (0 until 12).forEach { slot ->
-            val itemWidget = WItemSlot.of(blockInventory, slot)
+            val itemWidget = WSelectableItemSlot(blockInventory, slot)
             if (x >= 3) {
                 y++
                 x = 0

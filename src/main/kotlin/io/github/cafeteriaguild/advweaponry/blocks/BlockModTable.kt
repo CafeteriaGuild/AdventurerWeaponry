@@ -1,4 +1,6 @@
 package io.github.cafeteriaguild.advweaponry.blocks
 
-class BlockModTable {
+import net.minecraft.block.Block
+
+class BlockModTable(settings: Settings) : Block(settings) {
 }

@@ -19,7 +19,7 @@ import net.minecraft.world.World
 
 class FreezingBombEntity : ThrownItemEntity {
 
-    constructor(world: World, user: LivingEntity) : super(AWEntities.freezingBombEntityType, user, world)
+    constructor(world: World, user: LivingEntity?) : super(AWEntities.freezingBombEntityType, user, world)
     constructor(entityType: EntityType<out ThrownItemEntity>, world: World) : super(entityType, world)
 
     override fun getDefaultItem(): Item = AWItems.freezingBomb

@@ -1,17 +1,17 @@
 package io.github.cafeteriaguild.advweaponry
 
+import io.github.cafeteriaguild.advweaponry.entities.FreezingBombEntity
 import io.github.cafeteriaguild.advweaponry.gui.TableController
 import io.github.cafeteriaguild.advweaponry.items.abilities.DirtWallAbility
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.minecraft.block.Blocks
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.MinecraftClientGame
+import net.minecraft.client.render.entity.FlyingItemEntityRenderer
 import net.minecraft.client.sound.PositionedSoundInstance
-import net.minecraft.client.sound.SoundInstance
-import net.minecraft.client.sound.SoundInstanceListener
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandlerContext
@@ -44,6 +44,10 @@ object WeaponryClient : ClientModInitializer {
                     MinecraftClient.getInstance().particleManager.addBlockBreakParticles(it, Blocks.DIRT.defaultState)
                 }
             }
+        }
+
+        EntityRendererRegistry.INSTANCE.register(AWEntities.freezingBombEntityType) { dispatcher, context ->
+            FlyingItemEntityRenderer<FreezingBombEntity>(dispatcher, context.itemRenderer)
         }
     }
 }

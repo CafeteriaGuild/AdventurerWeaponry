@@ -46,12 +46,12 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
                 panel.add(modifierWidgets, 4, 0)
 
                 // INPUT
-                val inputItemWidget = WItemSlot.of(blockEntity.inputInv, 0)
+                val inputItemWidget = WItemSlot.of(blockEntity.ioInv, 0)
                 panel.add(inputItemWidget, 7.0, 0.5)
 
                 // OUTPUT
                 addSlotPeer(blockEntity.output)
-                val outputItemWidget = AWResultItemSlot(blockInventory, 9, blockEntity.output)
+                val outputItemWidget = AWResultItemSlot(blockEntity.ioInv, 1, blockEntity.output)
                 panel.add(outputItemWidget, 7.0, 2.5)
             }
         }

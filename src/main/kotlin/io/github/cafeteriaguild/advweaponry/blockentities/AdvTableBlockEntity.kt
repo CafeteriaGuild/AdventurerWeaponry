@@ -19,14 +19,14 @@ import net.minecraft.world.WorldAccess
 
 class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEntityClientSerializable, InventoryProvider, Tickable {
     // MATERIALS
-    private val inventory = AWInventory(10) { _, _ -> true }
+    private val inventory = AWInventory(9) { _, _ -> true }
     // MODIFIERS
     val modifiersInv = AWInventory(8) { _, _ -> true }
-    // INPUT ITEM
-    val inputInv = AWInventory(1) { _, _ -> true }
+    // INPUT/OUTPUT ITEM
+    val ioInv = AWInventory(2) { slot, _ -> slot == 0 }
+    val output = AWSlot(ioInv, 1, 7 * 18, (2.5 * 18).toInt())
     // POSSIBLE OUTPUTS
-    val possibleOutputsInv = AWInventory(12) { _, _  -> true }
-    val output = AWSlot(inventory, 9, 7 * 18, (2.5 * 18).toInt())
+    val possibleOutputsInv = AWInventory(13) { _, _  -> true }
     var selectedSlot: Int = -1
     private var possibleRecipes: List<List<PossibleRecipe>> = listOf()
     private var currentPage = 0
@@ -44,7 +44,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
                     possibleOutputsInv.setStack(slot, ItemStack(recipe.recipe.output))
                 } else possibleOutputsInv.setStack(slot, ItemStack.EMPTY)
             }
-            inventory.setStack(9, possibleOutputsInv.getStack(selectedSlot).copy())
+            ioInv.setStack(1, possibleOutputsInv.getStack(selectedSlot).copy())
             output.takeListener = {
                 items[selectedSlot].remainingStacks.forEachIndexed { index, itemStack ->
                     inventory.setStack(index, itemStack)
@@ -53,7 +53,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             markDirty()
             sync()
         } else {
-            inventory.setStack(9, ItemStack.EMPTY)
+            ioInv.setStack(1, ItemStack.EMPTY)
             possibleOutputsInv.clear()
         }
     }

@@ -3,7 +3,6 @@ package io.github.cafeteriaguild.advweaponry.gui
 import io.github.cafeteriaguild.advweaponry.add
 import io.github.cafeteriaguild.advweaponry.blockentities.AdvTableBlockEntity
 import io.github.cafeteriaguild.advweaponry.gui.widgets.AWResultItemSlot
-import io.github.cafeteriaguild.advweaponry.gui.widgets.AWWGridPanel
 import io.github.cafeteriaguild.advweaponry.gui.widgets.WSelectableItemSlot
 import io.github.cafeteriaguild.advweaponry.identifier
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription

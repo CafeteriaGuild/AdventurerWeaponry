@@ -21,7 +21,7 @@ object CraftingLogic {
         val groupedItems = craftingItems.groupBy({ it.item }, { it })
         val countedItems = groupedItems.mapValues { it.value.sumBy { it.count } }
 
-        return recipes.filter { it.craftingMaterials.all { (item, count) -> count >= countedItems[item] ?: 0 } }
+        return recipes.filter { it.craftingMaterials.all { (item, count) -> count <= countedItems[item] ?: 0 } }
             .map { PossibleRecipe(it, consumeCraftingItems(it, craftingItems), 0) }
             .chunked(12)
     }

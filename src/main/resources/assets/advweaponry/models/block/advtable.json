@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "west": "advweaponry:block/advtable_right",
+    "east": "advweaponry:block/advtable_left",
+    "down": "advweaponry:block/advtable_bottom",
+    "south": "advweaponry:block/advtable_back",
+    "north": "advweaponry:block/advtable_front",
+    "up": "advweaponry:block/advtable_top",
+    "particle": "advweaponry:block/advtable_front"
+  }
+}

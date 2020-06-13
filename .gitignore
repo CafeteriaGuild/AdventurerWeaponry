@@ -15,3 +15,10 @@ out/
 
 run/
 minecraft/
+
+# vscode
+.vscode
+bin/
+.classpath
+.project
+.settings

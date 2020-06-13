@@ -67,6 +67,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             val slot = stackTag.getInt("Slot")
             getInventory(null, null, null).setStack(slot, ItemStack.fromTag(stackTag))
         }
+        selectedSlot = tag?.getInt("SelectedSlot") ?: -1
         super.fromTag(state, tag)
     }
 
@@ -79,6 +80,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             tagList.add(inventory.getStack(i).toTag(stackTag))
         }
         tag.put("Inventory", tagList)
+        tag.putInt("SelectedSlot", selectedSlot)
         return super.toTag(tag)
     }
 
@@ -91,6 +93,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             tagList.add(inventory.getStack(i).toTag(stackTag))
         }
         tag.put("Inventory", tagList)
+        tag.putInt("SelectedSlot", selectedSlot)
         return tag
     }
 
@@ -101,5 +104,6 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             val slot = stackTag.getInt("Slot")
             getInventory(null, null, null).setStack(slot, ItemStack.fromTag(stackTag))
         }
+        selectedSlot = tag.getInt("SelectedSlot") ?: -1
     }
 }

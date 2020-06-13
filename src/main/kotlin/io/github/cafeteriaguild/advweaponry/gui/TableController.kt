@@ -26,7 +26,7 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
         screenHandlerContext.run { world, pos ->
             val blockEntity = world.getBlockEntity(pos)
             if (blockEntity is AdvTableBlockEntity) {
-
+                selectedSlot = blockEntity.selectedSlot
                 // CRAFTABLES
                 var x = 0
                 var y = 0

@@ -18,8 +18,8 @@ object CraftingLogic {
      * This methods' result return chunks of 12 recipes.
      */
     fun recipesForItems(craftingItems: List<ItemStack>): List<List<PossibleRecipe>> {
-        val groupedItems = craftingItems.groupBy({ it.item }, { it })
-        val countedItems = groupedItems.mapValues { it.value.sumBy { it.count } }
+        val countedItems = craftingItems.groupBy({ it.item }, { it })
+            .mapValues { it.value.sumBy(ItemStack::getCount) }
 
         return recipes.filter { it.craftingMaterials.all { (item, count) -> count <= countedItems[item] ?: 0 } }
             .map { PossibleRecipe(it, consumeCraftingItems(it, craftingItems), 0) }

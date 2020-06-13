@@ -3,16 +3,19 @@ package io.github.cafeteriaguild.advweaponry.gui
 import io.github.cafeteriaguild.advweaponry.add
 import io.github.cafeteriaguild.advweaponry.blockentities.AdvTableBlockEntity
 import io.github.cafeteriaguild.advweaponry.gui.widgets.AWResultItemSlot
+import io.github.cafeteriaguild.advweaponry.gui.widgets.AWWGridPanel
 import io.github.cafeteriaguild.advweaponry.gui.widgets.WSelectableItemSlot
 import io.github.cafeteriaguild.advweaponry.identifier
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
 import io.github.cottonmc.cotton.gui.widget.WGridPanel
 import io.github.cottonmc.cotton.gui.widget.WItemSlot
+import io.github.cottonmc.cotton.gui.widget.WLabel
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.slot.SlotActionType
+import net.minecraft.text.TranslatableText
 
 class TableController(syncId: Int, playerInventory: PlayerInventory, private val screenHandlerContext: ScreenHandlerContext)
     : SyncedGuiDescription(syncId, playerInventory, getBlockInventory(screenHandlerContext), getBlockPropertyDelegate(screenHandlerContext)) {
@@ -55,10 +58,13 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
         }
 
         // MATERIALS
+        val materialsLabel = WLabel(TranslatableText("container.winged.advtable.materials"))
+        materialsLabel.setSize(9*18, 11)
+        panel.add(materialsLabel, 0.0, 4.4)
         val materialsWidgets = WItemSlot.of(blockInventory, 0, 9, 1)
         panel.add(materialsWidgets, 0, 5)
 
-        panel.add(createPlayerInventoryPanel(), 0, 6)
+        panel.add(createPlayerInventoryPanel(), 0.0, 6.2)
 
         panel.validate(this)
     }
@@ -77,9 +83,5 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
 
     companion object {
         val SCREEN_ID = identifier("table_screen")
-
-        var MATERIALS_SLOTS = 20 until 29
-        var POSSIBLE_RECIPES_SLOTS = 0 until 12
     }
-
 }

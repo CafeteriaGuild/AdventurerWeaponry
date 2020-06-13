@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": {"model":  "advweaponry:block/advtable"},
+    "facing=south": {"model":  "advweaponry:block/advtable", "y": 180},
+    "facing=east": {"model":  "advweaponry:block/advtable", "y": 90},
+    "facing=west": {"model":  "advweaponry:block/advtable", "y":  270}
+  }
+}

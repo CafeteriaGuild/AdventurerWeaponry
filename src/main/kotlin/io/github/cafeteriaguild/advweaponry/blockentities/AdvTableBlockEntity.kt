@@ -46,9 +46,10 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             }
             ioInv.setStack(1, possibleOutputsInv.getStack(selectedSlot).copy())
             output.takeListener = {
-                items[selectedSlot].remainingStacks.forEachIndexed { index, itemStack ->
-                    inventory.setStack(index, itemStack)
-                }
+                if (items.size > selectedSlot)
+                    items[selectedSlot].remainingStacks.forEachIndexed { index, itemStack ->
+                        inventory.setStack(index, itemStack)
+                    }
             }
             markDirty()
             sync()

@@ -69,7 +69,8 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
     }
 
     override fun onSlotClick(slotNumber: Int, button: Int, action: SlotActionType?, player: PlayerEntity?): ItemStack {
-        if (slotNumber == 0 && action == SlotActionType.QUICK_MOVE) {
+        val result = super.onSlotClick(slotNumber, button, action, player)
+        if (!result.isEmpty && slotNumber == 0 && action == SlotActionType.QUICK_MOVE) {
             screenHandlerContext.run { world, pos ->
                 val blockEntity = world.getBlockEntity(pos)
                 if (blockEntity is AdvTableBlockEntity) {
@@ -77,7 +78,7 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
                 }
             }
         }
-        return super.onSlotClick(slotNumber, button, action, player)
+        return result
     }
 
     companion object {

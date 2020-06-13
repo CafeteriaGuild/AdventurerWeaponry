@@ -15,6 +15,7 @@ import net.minecraft.state.property.DirectionProperty
 import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
+import net.minecraft.util.ItemScatterer
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -52,6 +53,17 @@ class AdvTableBlock(settings: Settings) : Block(settings), BlockEntityProvider {
     }
 
     override fun createBlockEntity(world: BlockView?): BlockEntity? = AdvTableBlockEntity()
+
+    override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos?, newState: BlockState, moved: Boolean) {
+        if (!state.isOf(newState.block)) {
+            val blockEntity = world.getBlockEntity(pos)
+            if (blockEntity is AdvTableBlockEntity) {
+                ItemScatterer.spawn(world, pos, blockEntity.getInventory(state, world, pos))
+                world.updateComparators(pos, this)
+            }
+            super.onStateReplaced(state, world, pos, newState, moved)
+        }
+    }
 
     companion object {
         val SYNC_SELECTED_SLOT = identifier("sync_selected_slot")

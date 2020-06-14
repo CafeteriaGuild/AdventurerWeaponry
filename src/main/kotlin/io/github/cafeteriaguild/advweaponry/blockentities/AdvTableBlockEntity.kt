@@ -29,7 +29,8 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
     val possibleOutputsInv = AWInventory(13) { _, _  -> true }
     var selectedSlot: Int = -1
     private var possibleRecipes: List<List<PossibleRecipe>> = listOf()
-    private var currentPage = 0
+    var currentPage = 0
+    var maxPages = 1
 
     override fun tick() {
         if (world?.isClient == true) return
@@ -37,6 +38,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
         possibleRecipes = CraftingLogic.recipesForItems(stacks)
         currentPage = 0
         if (possibleRecipes.isNotEmpty()) {
+            maxPages = possibleRecipes.size.coerceAtLeast(1)
             val items = possibleRecipes[currentPage]
             (0 until 12).forEach { slot ->
                 if (items.size > slot) {

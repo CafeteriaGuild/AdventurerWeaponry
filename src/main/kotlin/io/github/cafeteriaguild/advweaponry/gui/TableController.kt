@@ -2,18 +2,21 @@ package io.github.cafeteriaguild.advweaponry.gui
 
 import io.github.cafeteriaguild.advweaponry.add
 import io.github.cafeteriaguild.advweaponry.blockentities.AdvTableBlockEntity
+import io.github.cafeteriaguild.advweaponry.blocks.AdvTableBlock
 import io.github.cafeteriaguild.advweaponry.gui.widgets.AWResultItemSlot
 import io.github.cafeteriaguild.advweaponry.gui.widgets.WSelectableItemSlot
 import io.github.cafeteriaguild.advweaponry.identifier
 import io.github.cottonmc.cotton.gui.SyncedGuiDescription
-import io.github.cottonmc.cotton.gui.widget.WGridPanel
-import io.github.cottonmc.cotton.gui.widget.WItemSlot
-import io.github.cottonmc.cotton.gui.widget.WLabel
+import io.github.cottonmc.cotton.gui.widget.*
+import io.netty.buffer.Unpooled
+import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.slot.SlotActionType
+import net.minecraft.text.LiteralText
 import net.minecraft.text.TranslatableText
 
 class TableController(syncId: Int, playerInventory: PlayerInventory, private val screenHandlerContext: ScreenHandlerContext)
@@ -26,16 +29,38 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
         screenHandlerContext.run { world, pos ->
             val blockEntity = world.getBlockEntity(pos)
             if (blockEntity is AdvTableBlockEntity) {
+                val nextButton = WButton(LiteralText("↑"))
+                val previousButton = WButton(LiteralText("↓"))
+                nextButton.setOnClick {
+                    blockEntity.currentPage = (blockEntity.currentPage + 1).coerceAtMost(blockEntity.maxPages)
+                    selectedSlot = -1
+                    val buf = PacketByteBuf(Unpooled.buffer())
+                    buf.writeBlockPos(pos)
+                    buf.writeInt(-1)
+                    ClientSidePacketRegistry.INSTANCE.sendToServer(AdvTableBlock.SYNC_SELECTED_SLOT, buf)
+                }
+                previousButton.setOnClick {
+                    blockEntity.currentPage = (blockEntity.currentPage - 1).coerceAtMost(blockEntity.maxPages)
+                    selectedSlot = -1
+                    val buf = PacketByteBuf(Unpooled.buffer())
+                    buf.writeBlockPos(pos)
+                    buf.writeInt(-1)
+                    ClientSidePacketRegistry.INSTANCE.sendToServer(AdvTableBlock.SYNC_SELECTED_SLOT, buf)
+                }
+                val pageText = WText(LiteralText((blockEntity.currentPage + 1).toString()))
+                panel.add(pageText, 0.3, 1.8)
+                panel.add(nextButton, -0.1, 0.0)
+                panel.add(previousButton, -0.1, 2.9)
                 selectedSlot = blockEntity.selectedSlot
                 // CRAFTABLES
-                var x = 0
+                var x = 1
                 var y = 0
                 (0 until 12).forEach { slot ->
                     val itemWidget = WSelectableItemSlot(this, screenHandlerContext, blockEntity.possibleOutputsInv, slot)
                     itemWidget.isModifiable = false
-                    if (x >= 3) {
+                    if (x >= 4) {
                         y++
-                        x = 0
+                        x = 1
                     }
                     panel.add(itemWidget, x, y)
                     x++
@@ -43,7 +68,7 @@ class TableController(syncId: Int, playerInventory: PlayerInventory, private val
 
                 // MODIFIERS
                 val modifierWidgets = WItemSlot.of(blockEntity.modifiersInv, 0, 2, 4)
-                panel.add(modifierWidgets, 4, 0)
+                panel.add(modifierWidgets, 4.5, 0.0)
 
                 // INPUT
                 val inputItemWidget = WItemSlot.of(blockEntity.ioInv, 0)

@@ -24,11 +24,14 @@ object WeaponryClient : ClientModInitializer {
         ScreenProviderRegistry.INSTANCE.registerFactory(
             TableController.SCREEN_ID
         ) { syncId: Int, _: Identifier?, player: PlayerEntity, buf: PacketByteBuf ->
+            val pos = buf.readBlockPos()
             CottonInventoryScreen(
                 TableController(
                     syncId,
                     player.inventory,
-                    ScreenHandlerContext.create(player.world, buf.readBlockPos())
+                    player.world,
+                    pos,
+                    ScreenHandlerContext.create(player.world, pos)
                 ), player
             )
         }

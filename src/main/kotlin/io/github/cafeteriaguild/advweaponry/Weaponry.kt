@@ -38,7 +38,8 @@ object Weaponry : ModInitializer {
         ContainerProviderRegistry.INSTANCE.registerFactory(
             TableController.SCREEN_ID
         ) { syncId: Int, _: Identifier?, player: PlayerEntity, buf: PacketByteBuf ->
-            TableController(syncId, player.inventory, ScreenHandlerContext.create(player.world, buf.readBlockPos()))
+            val pos = buf.readBlockPos()
+            TableController(syncId, player.inventory, player.world, pos, ScreenHandlerContext.create(player.world, pos))
         }
         ServerSidePacketRegistry.INSTANCE.register(AdvTableBlock.SYNC_SELECTED_SLOT) { ctx, buf ->
             val pos = buf.readBlockPos()

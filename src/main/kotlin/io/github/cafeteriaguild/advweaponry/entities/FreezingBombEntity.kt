@@ -33,7 +33,10 @@ class FreezingBombEntity : ThrownItemEntity {
     @Environment(EnvType.CLIENT)
     private fun getParticleParameters(): ParticleEffect? {
         val itemStack = this.item
-        return (if (itemStack.isEmpty) ParticleTypes.ITEM_SNOWBALL else ItemStackParticleEffect(ParticleTypes.ITEM, itemStack)) as ParticleEffect
+        return (if (itemStack.isEmpty) ParticleTypes.ITEM_SNOWBALL else ItemStackParticleEffect(
+            ParticleTypes.ITEM,
+            itemStack
+        )) as ParticleEffect
     }
 
     @Environment(EnvType.CLIENT)
@@ -64,15 +67,27 @@ class FreezingBombEntity : ThrownItemEntity {
                     for (z in box.minZ.toInt() until box.maxZ.toInt()) {
                         val pos = BlockPos(x, y, z)
                         val snowLayer = Blocks.SNOW.defaultState
-                        if (world.isAir(pos) && snowLayer.canPlaceAt(world, pos))
+                        val blockState = world.getBlockState(pos)
+
+                        if (blockState.block == Blocks.SNOW) {
+                            val grow = blockState.get(SnowBlock.LAYERS) + SnowBlock.LAYERS.values.random()
+                            if (grow in SnowBlock.LAYERS.values) {
+                                world.setBlockState(pos, snowLayer.with(SnowBlock.LAYERS, grow))
+                            } else {
+                                world.setBlockState(pos, Blocks.SNOW_BLOCK.defaultState)
+                            }
+                        } else if (blockState.material.isReplaceable && snowLayer.canPlaceAt(world, pos)) {
                             world.setBlockState(pos, snowLayer.with(SnowBlock.LAYERS, SnowBlock.LAYERS.values.random()))
-                        else if (world.isWater(pos))
+                        } else if (world.isWater(pos)) {
                             world.setBlockState(pos, Blocks.ICE.defaultState)
+                        }
                     }
             world.getEntities(LivingEntity::class.java, box) { !it.isSpectator }.forEach { entity ->
-                entity.addStatusEffect(StatusEffectInstance(
-                    StatusEffects.SLOWNESS, 200, 3
-                ))
+                entity.addStatusEffect(
+                    StatusEffectInstance(
+                        StatusEffects.SLOWNESS, 200, 3
+                    )
+                )
             }
             world.sendEntityStatus(this, 3.toByte())
             this.remove()

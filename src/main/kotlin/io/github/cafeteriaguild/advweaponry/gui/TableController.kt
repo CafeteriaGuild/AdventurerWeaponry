@@ -22,7 +22,6 @@ import net.minecraft.text.LiteralText
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import java.util.function.BiFunction
 
 class TableController(
     syncId: Int,

@@ -2,8 +2,11 @@ package io.github.cafeteriaguild.advweaponry.entities
 
 import io.github.cafeteriaguild.advweaponry.AWEntities
 import io.github.cafeteriaguild.advweaponry.AWItems
+import io.github.cafeteriaguild.advweaponry.identifier
+import io.netty.buffer.Unpooled
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.block.Blocks
 import net.minecraft.block.SnowBlock
 import net.minecraft.entity.EntityType
@@ -12,8 +15,10 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.BlazeEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity
 import net.minecraft.item.Item
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.particle.ItemStackParticleEffect
 import net.minecraft.particle.ParticleEffect
 import net.minecraft.particle.ParticleTypes
@@ -62,6 +67,7 @@ class FreezingBombEntity : ThrownItemEntity {
             val hitPos = hitResult!!.pos
             val centerPos = BlockPos(hitPos.x.toInt(), hitPos.y.toInt(), hitPos.z.toInt())
             val box = Box(centerPos).expand(2.0)
+            val affectedPos = mutableListOf<BlockPos>()
             for (x in box.minX.toInt() until box.maxX.toInt())
                 for (y in box.minY.toInt() until box.maxY.toInt())
                     for (z in box.minZ.toInt() until box.maxZ.toInt()) {
@@ -80,8 +86,14 @@ class FreezingBombEntity : ThrownItemEntity {
                             world.setBlockState(pos, snowLayer.with(SnowBlock.LAYERS, SnowBlock.LAYERS.values.random()))
                         } else if (world.isWater(pos)) {
                             world.setBlockState(pos, Blocks.ICE.defaultState)
-                        }
+                        } else continue
+                        affectedPos.add(pos)
                     }
+            val buf = PacketByteBuf(Unpooled.buffer())
+            buf.writeInt(affectedPos.size)
+            affectedPos.forEach { buf.writeBlockPos(it) }
+            if (owner is PlayerEntity)
+                ServerSidePacketRegistry.INSTANCE.sendToPlayer(owner as PlayerEntity, PARTICLE_PACKET_ID, buf)
             world.getEntities(LivingEntity::class.java, box) { !it.isSpectator }.forEach { entity ->
                 entity.addStatusEffect(
                     StatusEffectInstance(
@@ -92,5 +104,9 @@ class FreezingBombEntity : ThrownItemEntity {
             world.sendEntityStatus(this, 3.toByte())
             this.remove()
         }
+    }
+
+    companion object {
+        val PARTICLE_PACKET_ID = identifier("freezing_bomb_particle")
     }
 }

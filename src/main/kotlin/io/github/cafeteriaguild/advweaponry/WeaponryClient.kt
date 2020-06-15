@@ -49,6 +49,15 @@ object WeaponryClient : ClientModInitializer {
             }
         }
 
+        ClientSidePacketRegistry.INSTANCE.register(FreezingBombEntity.PARTICLE_PACKET_ID) { ctx, buf ->
+            val affectedPositions = List(buf.readInt()) { buf.readBlockPos() }
+            ctx.taskQueue.execute {
+                affectedPositions.forEach {
+                    MinecraftClient.getInstance().particleManager.addBlockBreakParticles(it, Blocks.SNOW.defaultState)
+                }
+            }
+        }
+
         EntityRendererRegistry.INSTANCE.register(AWEntities.freezingBombEntityType) { dispatcher, context ->
             FlyingItemEntityRenderer<FreezingBombEntity>(dispatcher, context.itemRenderer)
         }

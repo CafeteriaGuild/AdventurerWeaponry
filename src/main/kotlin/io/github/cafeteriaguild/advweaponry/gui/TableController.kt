@@ -29,7 +29,7 @@ class TableController(
     world: World,
     pos: BlockPos,
     private val ctx: ScreenHandlerContext
-) : SyncedGuiDescription(syncId, playerInventory, getBlockInventory(ctx), getBlockPropertyDelegate(ctx)) {
+) : SyncedGuiDescription(null, syncId, playerInventory, getBlockInventory(ctx), getBlockPropertyDelegate(ctx)) {
     var selectedSlot: Int = -1
 
     // MODIFIERS

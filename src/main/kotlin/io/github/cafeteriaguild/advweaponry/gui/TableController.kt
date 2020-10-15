@@ -55,7 +55,7 @@ class TableController(
         val nextButton = WButton(LiteralText("↑"))
         val previousButton = WButton(LiteralText("↓"))
         nextButton.setOnClick {
-            blockEntity.currentPage = (blockEntity.currentPage + 1).coerceAtMost(blockEntity.maxPages)
+            blockEntity.currentPage = (blockEntity.currentPage + 1).coerceIn(0, blockEntity.maxPages - 1)
             selectedSlot = -1
             val buf = PacketByteBuf(Unpooled.buffer())
             buf.writeBlockPos(pos)
@@ -63,14 +63,14 @@ class TableController(
             ClientSidePacketRegistry.INSTANCE.sendToServer(AdvTableBlock.SYNC_SELECTED_SLOT, buf)
         }
         previousButton.setOnClick {
-            blockEntity.currentPage = (blockEntity.currentPage - 1).coerceAtMost(blockEntity.maxPages)
+            blockEntity.currentPage = (blockEntity.currentPage - 1).coerceIn(0, blockEntity.maxPages - 1)
             selectedSlot = -1
             val buf = PacketByteBuf(Unpooled.buffer())
             buf.writeBlockPos(pos)
             buf.writeInt(-1)
             ClientSidePacketRegistry.INSTANCE.sendToServer(AdvTableBlock.SYNC_SELECTED_SLOT, buf)
         }
-        val pageText = WText(LiteralText((blockEntity.currentPage + 1).toString()))
+        val pageText = WDynamicLabel { (blockEntity.currentPage + 1).toString() }
         panel.add(pageText, 0.3, 1.8)
         panel.add(nextButton, -0.1, 0.0)
         panel.add(previousButton, -0.1, 2.9)

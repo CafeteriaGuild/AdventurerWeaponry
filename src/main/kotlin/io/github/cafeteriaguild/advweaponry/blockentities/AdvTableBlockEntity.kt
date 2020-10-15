@@ -36,7 +36,6 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
         if (world?.isClient == true) return
         val stacks = (0 until 9).map { slot -> inventory.getStack(slot) }
         possibleRecipes = CraftingLogic.recipesForItems(stacks)
-        currentPage = 0
         if (possibleRecipes.isNotEmpty()) {
             maxPages = possibleRecipes.size.coerceAtLeast(1)
             val items = possibleRecipes[currentPage]
@@ -71,6 +70,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             getInventory(null, null, null).setStack(slot, ItemStack.fromTag(stackTag))
         }
         selectedSlot = tag?.getInt("SelectedSlot") ?: -1
+        currentPage = tag?.getInt("CurrentPage") ?: 0
         super.fromTag(state, tag)
     }
 
@@ -84,6 +84,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
         }
         tag.put("Inventory", tagList)
         tag.putInt("SelectedSlot", selectedSlot)
+        tag.putInt("CurrentPage", currentPage)
         return super.toTag(tag)
     }
 
@@ -97,6 +98,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
         }
         tag.put("Inventory", tagList)
         tag.putInt("SelectedSlot", selectedSlot)
+        tag.putInt("CurrentPage", currentPage)
         return tag
     }
 
@@ -107,6 +109,7 @@ class AdvTableBlockEntity : BlockEntity(AWBlocks.advTableBlockEntity), BlockEnti
             val slot = stackTag.getInt("Slot")
             getInventory(null, null, null).setStack(slot, ItemStack.fromTag(stackTag))
         }
-        selectedSlot = tag.getInt("SelectedSlot") ?: -1
+        selectedSlot = tag.getInt("SelectedSlot")
+        currentPage = tag.getInt("CurrentPage")
     }
 }
